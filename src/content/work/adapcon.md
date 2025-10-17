@@ -2,7 +2,7 @@
 company: "Adapcon"
 role: "Fullstack Developer"
 dateStart: "01/09/2023"
-dateEnd: "Current"
+dateEnd: "01/05/2025"
 tags: ["NodeJS", "Serverless", "AWS", "DynamoDB", "Lambda", "VueJS", "Jest", "Mocha"]
 ---
 

@@ -17,7 +17,12 @@ const translatePath = useTranslatedPath(lang);
     <div class="flex flex-wrap gap-y-2 justify-between">
       <Link href={translatePath("/")} underline={false}>
         <div class="font-semibold">
-          {SITE.NAME}
+          <span class="hidden sm:block">
+            {SITE.FULLNAME}
+          </span>
+          <span class="sm:hidden">
+            {SITE.NAME}
+          </span>
         </div>
       </Link>
       <nav class="flex gap-1">

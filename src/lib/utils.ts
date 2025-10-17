@@ -37,5 +37,5 @@ export function dateRange(start: Date | string, endDate?: Date | string): string
     }
   }
 
-  return `${startMonth}${startYear} - ${endMonth}${endYear}`;
+  return `${startMonth}/${startYear} - ${endMonth}${endMonth && "/"}${endYear}`;
 }
