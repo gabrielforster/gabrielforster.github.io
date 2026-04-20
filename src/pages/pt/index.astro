@@ -1,5 +1,5 @@
 ---
-import { getCollection, render } from "astro:content";
+import { getCollection } from "astro:content";
 import Container from "@components/Container.astro";
 import PageLayout from "@layouts/PageLayout.astro";
 import ArrowCard from "@components/ArrowCard.astro";
@@ -11,9 +11,9 @@ import type { MarkdownHeading } from "astro";
 
 const headings: MarkdownHeading[] = [
   { depth: 2, slug: "sobre", text: "Sobre" },
-  { depth: 2, slug: "posts-recentes", text: "Posts recentes" },
   { depth: 2, slug: "experiencias", text: "Experiências" },
   { depth: 2, slug: "projetos-recentes", text: "Projetos recentes" },
+  { depth: 2, slug: "posts-recentes", text: "Posts recentes" },
   { depth: 2, slug: "vamos-conversar", text: "Vamos conversar?" },
 ];
 
@@ -23,23 +23,16 @@ const translatePath = useTranslatedPath(lang);
 const blog = (await getCollection("pt-blog"))
   .filter(post => !post.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0,SITE.NUM_POSTS_ON_HOMEPAGE);
+  .slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
 
 const projects = (await getCollection("pt-projects"))
   .filter(project => !project.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0,SITE.NUM_PROJECTS_ON_HOMEPAGE);
+  .slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE);
 
-const allwork = (await getCollection("pt-work"))
+const work = (await getCollection("pt-work"))
   .sort((a, b) => new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf())
-  .slice(0,SITE.NUM_WORKS_ON_HOMEPAGE);
-
-const work = await Promise.all(
-  allwork.map(async (item) => {
-    const { Content } = await render(item);
-    return { ...item, Content };
-  })
-);
+  .slice(0, SITE.NUM_WORKS_ON_HOMEPAGE);
 
 ---
 
@@ -75,46 +68,27 @@ const work = await Promise.all(
 
       <section class="animate space-y-6">
         <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h2 id="posts-recentes" class="font-semibold text-black dark:text-white">
-            Posts recentes
-          </h2>
-          <Link href={translatePath("blog")}>
-            Ver todos
-          </Link>
-        </div>
-        <ul class="flex flex-col gap-4">
-          {blog.map(post => (
-            <li>
-              <ArrowCard entry={post} />
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
           <h2 id="experiencias" class="font-semibold text-black dark:text-white">
             Experiências
           </h2>
           <Link href={translatePath("work")}>
-            Ver todas
+            Ver mais
           </Link>
         </div>
-        <ul class="flex flex-col space-y-4">
+        <ul class="flex flex-col sm:flex-row gap-4">
           {work.map(entry => (
-            <li>
-              <div class="text-sm opacity-75">
-                {dateRange(entry.data.dateStart, entry.data.dateEnd)}
+            <li class="flex-1">
+              <div class="rounded-lg border border-black/15 dark:border-white/20 p-4 hover:bg-black/5 dark:hover:bg-white/5 transition-colors duration-200 ease-in-out h-full">
+                <div class="font-semibold text-black dark:text-white text-sm">
+                  {entry.data.company}
+                </div>
+                <div class="text-xs mt-1">
+                  {entry.data.role}
+                </div>
+                <div class="text-xs opacity-75 mt-1">
+                  {dateRange(entry.data.dateStart, entry.data.dateEnd)}
+                </div>
               </div>
-              <div class="font-semibold text-black dark:text-white">
-                {entry.data.company}
-              </div>
-              <div class="text-sm opacity-75">
-                {entry.data.role}
-              </div>
-              <article>
-                <entry.Content />
-              </article>
             </li>
           ))}
         </ul>
@@ -126,13 +100,38 @@ const work = await Promise.all(
             Projetos recentes
           </h2>
           <Link href={translatePath("projects")}>
+            Ver mais
+          </Link>
+        </div>
+        <ul class="flex flex-col sm:flex-row gap-4">
+          {projects.map(project => (
+            <li class="flex-1">
+              <div class="rounded-lg border border-black/15 dark:border-white/20 p-4 hover:bg-black/5 dark:hover:bg-white/5 transition-colors duration-200 ease-in-out h-full">
+                <div class="font-semibold text-black dark:text-white text-sm">
+                  {project.data.title}
+                </div>
+                <div class="text-xs mt-1">
+                  {project.data.description}
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="animate space-y-6">
+        <div class="flex flex-wrap gap-y-2 items-center justify-between">
+          <h2 id="posts-recentes" class="font-semibold text-black dark:text-white">
+            Posts recentes
+          </h2>
+          <Link href={translatePath("blog")}>
             Ver todos
           </Link>
         </div>
         <ul class="flex flex-col gap-4">
-          {projects.map(project => (
+          {blog.map(post => (
             <li>
-              <ArrowCard entry={project} />
+              <ArrowCard entry={post} />
             </li>
           ))}
         </ul>

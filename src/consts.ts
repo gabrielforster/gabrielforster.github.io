@@ -5,7 +5,7 @@ export const SITE: Site = {
   FULLNAME: "Gabriel Rocha",
   EMAIL: "contatogabrielrochaf@gmail.com",
   NUM_POSTS_ON_HOMEPAGE: 3,
-  NUM_WORKS_ON_HOMEPAGE: 2,
+  NUM_WORKS_ON_HOMEPAGE: 3,
   NUM_PROJECTS_ON_HOMEPAGE: 3,
 };
 
