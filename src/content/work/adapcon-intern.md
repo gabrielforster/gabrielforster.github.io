@@ -1,5 +1,5 @@
 ---
-company: "Adapcon"
+company: "Adapcon (Internship)"
 role: "Intern"
 dateStart: "04/05/2022"
 dateEnd: "12/10/2022"
