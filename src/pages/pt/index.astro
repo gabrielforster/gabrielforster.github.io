@@ -78,7 +78,7 @@ const work = (await getCollection("pt-work"))
         <ul class="flex flex-col sm:flex-row gap-4">
           {work.map(entry => (
             <li class="flex-1">
-              <div class="rounded-lg border border-black/15 dark:border-white/20 p-4 hover:bg-black/5 dark:hover:bg-white/5 transition-colors duration-200 ease-in-out h-full">
+              <div class="rounded-lg border border-black/15 dark:border-white/20 p-4 hover:bg-black/5 dark:hover:bg-white/5 transition-colors duration-200 ease-in-out h-full cursor-pointer">
                 <div class="font-semibold text-black dark:text-white text-sm">
                   {entry.data.company}
                 </div>
@@ -106,7 +106,7 @@ const work = (await getCollection("pt-work"))
         <ul class="flex flex-col sm:flex-row gap-4">
           {projects.map(project => (
             <li class="flex-1">
-              <div class="rounded-lg border border-black/15 dark:border-white/20 p-4 hover:bg-black/5 dark:hover:bg-white/5 transition-colors duration-200 ease-in-out h-full">
+              <div class="rounded-lg border border-black/15 dark:border-white/20 p-4 hover:bg-black/5 dark:hover:bg-white/5 transition-colors duration-200 ease-in-out h-full cursor-pointer">
                 <div class="font-semibold text-black dark:text-white text-sm">
                   {project.data.title}
                 </div>
