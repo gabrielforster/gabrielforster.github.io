@@ -2,14 +2,14 @@
 title: "Getting started"
 description: "Hit the ground running."
 date: "Mar 22 2024"
-draft: true
+draft: false
 ---
 
 The basic configuration of Nano is pretty simple.
 
 Edit `src/consts.ts`
 
-Customize the base site
+## Customize the base site
 
 ```ts
 // src/consts.ts
@@ -31,7 +31,7 @@ export const SITE: Site = {
 | NUM_WORKS | Yes | Limit num of works on home page. |
 | NUM_PROJECTS | Yes | Limit num of projects on home page. |
 
-Customize your page metadata
+### Customize your page metadata
 
 ```ts
 // src/consts.ts

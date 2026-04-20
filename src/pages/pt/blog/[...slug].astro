@@ -3,7 +3,7 @@ import { type CollectionEntry, getCollection, render } from "astro:content";
 import PageLayout from "@layouts/PageLayout.astro";
 import Container from "@components/Container.astro";
 import FormattedDate from "@components/FormattedDate.astro";
-import { readingTime } from "@lib/utils";
+import { blogPostSlug, readingTime } from "@lib/utils";
 import BackToPrev from "@components/BackToPrev.astro";
 import { getLangFromUrl, useTranslatedPath  } from "../../../i18n/utils";
 
@@ -12,7 +12,7 @@ export async function getStaticPaths() {
     .filter(post => !post.data.draft)
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
   return posts.map((post) => ({
-    params: { slug: post.id },
+    params: { slug: blogPostSlug(post.data.date, post.id) },
     props: post,
   }));
 }

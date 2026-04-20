@@ -13,6 +13,13 @@ export function formatDate(date: Date, lang: "en" | "pt" = "en") {
   }).format(date);
 }
 
+export function blogPostSlug(date: Date, id: string): string {
+  const yyyy = date.getUTCFullYear();
+  const mm = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const dd = String(date.getUTCDate()).padStart(2, "0");
+  return `${yyyy}/${mm}/${dd}/${id}`;
+}
+
 export function readingTime(html: string) {
   const textOnly = html.replace(/<[^>]+>/g, "");
   const wordCount = textOnly.split(/\s+/).length;

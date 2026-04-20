@@ -1,6 +1,7 @@
 import rss from "@astrojs/rss";
 import { getCollection } from "astro:content";
 import { HOME } from "@consts";
+import { blogPostSlug } from "@lib/utils";
 
 type Context = {
   site: string
@@ -20,11 +21,16 @@ export async function GET(context: Context) {
     title: HOME.TITLE,
     description: HOME.DESCRIPTION,
     site: context.site,
-    items: items.map((item) => ({
-      title: item.data.title,
-      description: item.data.description,
-      pubDate: item.data.date,
-      link: `/${item.collection}/${item.id}/`,
-    })),
+    items: items.map((item) => {
+      const tail = item.collection === "blog"
+        ? blogPostSlug(item.data.date, item.id)
+        : item.id;
+      return {
+        title: item.data.title,
+        description: item.data.description,
+        pubDate: item.data.date,
+        link: `/${item.collection}/${tail}/`,
+      };
+    }),
   });
 }
