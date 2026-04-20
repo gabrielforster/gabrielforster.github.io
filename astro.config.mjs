@@ -5,7 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://portfolio-seven-chi-24.vercel.app/",
+  site: "https://gabrielforster.github.io",
   base: "/",
   integrations: [mdx(), sitemap()],
   output: "static",
