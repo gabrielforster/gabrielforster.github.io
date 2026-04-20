@@ -1,0 +1,123 @@
+---
+import type { MarkdownHeading } from "astro";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+type Props = {
+  headings: MarkdownHeading[];
+};
+
+const { headings } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// Only include h2 and h3
+const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+---
+
+{toc.length > 0 && (
+  <aside id="toc" class="hidden xl:block fixed w-56 top-32 right-[max(1rem,calc((100vw-640px)/2-16rem))]">
+    <nav>
+      <p class="font-semibold text-xs uppercase tracking-wide text-black dark:text-white mb-3">
+        {t("toc.onThisPage")}
+      </p>
+      <ul class="space-y-1.5 text-sm border-l border-black/10 dark:border-white/15">
+        {toc.map((heading) => (
+          <li>
+            <a
+              href={`#${heading.slug}`}
+              data-toc-link
+              data-slug={heading.slug}
+              class:list={[
+                "block transition-colors duration-200 ease-in-out hover:text-black dark:hover:text-white",
+                heading.depth === 2 ? "pl-3" : "pl-6",
+              ]}
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </aside>
+)}
+
+<script>
+  function initToc() {
+    const links = document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]");
+    if (!links.length) return;
+
+    const slugs = Array.from(links).map((l) => l.dataset.slug!);
+    const headingEls = slugs
+      .map((s) => document.getElementById(s))
+      .filter(Boolean) as HTMLElement[];
+
+    if (!headingEls.length) return;
+
+    let activeSlug = slugs[0];
+
+    function setActive(slug: string) {
+      if (slug === activeSlug) return;
+      activeSlug = slug;
+      links.forEach((link) => {
+        const isActive = link.dataset.slug === slug;
+        link.classList.toggle("text-black", isActive);
+        link.classList.toggle("dark:text-white", isActive);
+        link.classList.toggle("font-medium", isActive);
+
+        // active border indicator
+        const li = link.parentElement!;
+        li.classList.toggle("border-l-2", isActive);
+        li.classList.toggle("border-black/60", isActive);
+        li.classList.toggle("dark:border-white/60", isActive);
+        li.classList.toggle("-ml-px", isActive);
+      });
+    }
+
+    // Set first heading active initially
+    setActive(slugs[0]);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Find the first heading that is intersecting (top-most visible)
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActive(entry.target.id);
+            return;
+          }
+        }
+        // If none intersecting, find the last heading that is above viewport
+        const scrollY = window.scrollY;
+        let current = slugs[0];
+        for (const el of headingEls) {
+          if (el.offsetTop - 100 <= scrollY) {
+            current = el.id;
+          }
+        }
+        setActive(current);
+      },
+      {
+        rootMargin: "-80px 0px -60% 0px",
+        threshold: 0,
+      }
+    );
+
+    headingEls.forEach((el) => observer.observe(el));
+
+    // Smooth scroll on click
+    links.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const target = document.getElementById(link.dataset.slug!);
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth" });
+          history.replaceState(null, "", `#${link.dataset.slug}`);
+        }
+      });
+    });
+  }
+
+  // Run on initial load and after Astro page transitions
+  document.addEventListener("DOMContentLoaded", initToc);
+  document.addEventListener("astro:page-load", initToc);
+</script>
