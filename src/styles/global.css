@@ -55,7 +55,7 @@ article {
   article a {
     @apply font-sans text-current underline underline-offset-2;
     @apply decoration-black/15 dark:decoration-white/30;
-    @apply transition-colors duration-300 ease-in-out;
+    @apply transition-colors duration-200 ease-in-out;
   }
   article a:hover {
     @apply text-black dark:text-white;
@@ -65,7 +65,7 @@ article {
 
 .animate {
   @apply opacity-0 translate-y-3;
-  @apply transition-all duration-700 ease-out;
+  @apply transition-all duration-300 ease-out;
 }
 
 .animate.show {
