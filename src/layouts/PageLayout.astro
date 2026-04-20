@@ -1,16 +1,19 @@
 ---
+import type { MarkdownHeading } from "astro";
 import Head from "@components/Head.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
+import TableOfContents from "@components/TableOfContents.astro";
 import { SITE } from "@consts";
 import { getLangFromUrl } from "../i18n/utils";
 
 type Props = {
   title: string;
   description: string;
+  headings?: MarkdownHeading[];
 };
 
-const { title, description } = Astro.props;
+const { title, description, headings } = Astro.props;
 
 const lang = getLangFromUrl(Astro.url);
 ---
@@ -25,6 +28,7 @@ const lang = getLangFromUrl(Astro.url);
     <main>
       <slot />
     </main>
+    <TableOfContents headings={headings} />
     <Footer />
   </body>
 </html>

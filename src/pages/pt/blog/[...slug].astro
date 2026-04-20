@@ -5,7 +5,6 @@ import Container from "@components/Container.astro";
 import FormattedDate from "@components/FormattedDate.astro";
 import { blogPostSlug, readingTime } from "@lib/utils";
 import BackToPrev from "@components/BackToPrev.astro";
-import TableOfContents from "@components/TableOfContents.astro";
 import { getLangFromUrl, useTranslatedPath  } from "../../../i18n/utils";
 
 export async function getStaticPaths() {
@@ -26,7 +25,7 @@ const lang = getLangFromUrl(Astro.url);
 const translatePath = useTranslatedPath(lang);
 ---
 
-<PageLayout title={post.data.title} description={post.data.description}>
+<PageLayout title={post.data.title} description={post.data.description} headings={headings}>
   <Container>
     <div class="animate">
       <BackToPrev href={translatePath("/blog")}>
@@ -51,5 +50,4 @@ const translatePath = useTranslatedPath(lang);
       <Content />
     </article>
   </Container>
-  <TableOfContents headings={headings} />
 </PageLayout>

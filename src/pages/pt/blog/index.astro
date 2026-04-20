@@ -5,6 +5,7 @@ import Container from "@components/Container.astro";
 import ArrowCard from "@components/ArrowCard.astro";
 import { BLOG } from "@consts";
 import { getLangFromUrl, useTranslations } from "../../../i18n/utils";
+import type { MarkdownHeading } from "astro";
 
 const data = (await getCollection("pt-blog"))
   .filter(post => !post.data.draft)
@@ -25,11 +26,17 @@ const posts = data.reduce((acc: Acc, post) => {
 
 const years = Object.keys(posts).sort((a, b) => parseInt(b) - parseInt(a));
 
+const headings: MarkdownHeading[] = years.map(year => ({
+  depth: 2,
+  slug: year,
+  text: year,
+}));
+
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 ---
 
-<PageLayout title={BLOG.TITLE} description={BLOG.DESCRIPTION}>
+<PageLayout title={BLOG.TITLE} description={BLOG.DESCRIPTION} headings={headings}>
   <Container>
     <div class="space-y-10">
       <div class="animate font-semibold text-black dark:text-white">
@@ -39,9 +46,9 @@ const t = useTranslations(lang);
         {!years.length && t("content.nothingHere")}
         {!!years.length && years.map(year => (
           <section class="animate space-y-4">
-            <div class="font-semibold text-black dark:text-white">
+            <h2 id={year} class="font-semibold text-black dark:text-white">
               {year}
-            </div>
+            </h2>
             <div>
               <ul class="flex flex-col gap-4">
                 {

@@ -7,6 +7,15 @@ import Link from "@components/Link.astro";
 import { dateRange } from "@lib/utils";
 import { SITE, HOME, SOCIALS } from "@consts";
 import { getLangFromUrl, useTranslatedPath  } from "../../i18n/utils";
+import type { MarkdownHeading } from "astro";
+
+const headings: MarkdownHeading[] = [
+  { depth: 2, slug: "sobre", text: "Sobre" },
+  { depth: 2, slug: "posts-recentes", text: "Posts recentes" },
+  { depth: 2, slug: "experiencias", text: "Experiências" },
+  { depth: 2, slug: "projetos-recentes", text: "Projetos recentes" },
+  { depth: 2, slug: "vamos-conversar", text: "Vamos conversar?" },
+];
 
 const lang = getLangFromUrl(Astro.url);
 const translatePath = useTranslatedPath(lang);
@@ -34,7 +43,7 @@ const work = await Promise.all(
 
 ---
 
-<PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
+<PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION} headings={headings}>
   <Container>
     <h4 class="animate font-semibold text-black dark:text-white flex gap-1 items-center">
       <span>
@@ -46,6 +55,7 @@ const work = await Promise.all(
     </h4>
     <div class="space-y-16">
       <section>
+        <h2 id="sobre" class="sr-only">Sobre</h2>
         <article class="space-y-4">
           <p class="animate">
             Sou um desenvolvedor de software fullstack com expertise na construção de sistemas robustos, simples e manuteníveis.
@@ -65,9 +75,9 @@ const work = await Promise.all(
 
       <section class="animate space-y-6">
         <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-black dark:text-white">
+          <h2 id="posts-recentes" class="font-semibold text-black dark:text-white">
             Posts recentes
-          </h5>
+          </h2>
           <Link href={translatePath("blog")}>
             Ver todos
           </Link>
@@ -83,9 +93,9 @@ const work = await Promise.all(
 
       <section class="animate space-y-6">
         <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-black dark:text-white">
+          <h2 id="experiencias" class="font-semibold text-black dark:text-white">
             Experiências
-          </h5>
+          </h2>
           <Link href={translatePath("work")}>
             Ver todas
           </Link>
@@ -112,9 +122,9 @@ const work = await Promise.all(
 
       <section class="animate space-y-6">
         <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-black dark:text-white">
+          <h2 id="projetos-recentes" class="font-semibold text-black dark:text-white">
             Projetos recentes
-          </h5>
+          </h2>
           <Link href={translatePath("projects")}>
             Ver todos
           </Link>
@@ -129,9 +139,9 @@ const work = await Promise.all(
       </section>
 
       <section class="animate space-y-4">
-        <h5 class="font-semibold text-black dark:text-white">
+        <h2 id="vamos-conversar" class="font-semibold text-black dark:text-white">
           Vamos conversar?
-        </h5>
+        </h2>
         <article>
           <p>
             Se você deseja entrar em contato comigo,

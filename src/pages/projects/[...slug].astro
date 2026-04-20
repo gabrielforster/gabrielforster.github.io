@@ -19,10 +19,10 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<"projects">;
 
 const project = Astro.props;
-const { Content } = await render(project);
+const { Content, headings } = await render(project);
 ---
 
-<PageLayout title={project.data.title} description={project.data.description}>
+<PageLayout title={project.data.title} description={project.data.description} headings={headings}>
   <Container>
     <div class="animate">
       <BackToPrev href="/projects">

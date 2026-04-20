@@ -5,7 +5,6 @@ import Container from "@components/Container.astro";
 import FormattedDate from "@components/FormattedDate.astro";
 import { blogPostSlug, readingTime } from "@lib/utils";
 import BackToPrev from "@components/BackToPrev.astro";
-import TableOfContents from "@components/TableOfContents.astro";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("blog"))
@@ -22,7 +21,7 @@ const post = Astro.props;
 const { Content, headings } = await render(post);
 ---
 
-<PageLayout title={post.data.title} description={post.data.description}>
+<PageLayout title={post.data.title} description={post.data.description} headings={headings}>
   <Container>
     <div class="animate">
       <BackToPrev href="/blog">
@@ -47,5 +46,4 @@ const { Content, headings } = await render(post);
       <Content />
     </article>
   </Container>
-  <TableOfContents headings={headings} />
 </PageLayout>

@@ -1,12 +1,13 @@
 ---
 import type { MarkdownHeading } from "astro";
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import BackToTop from "@components/BackToTop.astro";
 
 type Props = {
-  headings: MarkdownHeading[];
+  headings?: MarkdownHeading[];
 };
 
-const { headings } = Astro.props;
+const { headings = [] } = Astro.props;
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -15,8 +16,8 @@ const t = useTranslations(lang);
 const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 ---
 
-{toc.length > 0 && (
-  <aside id="toc" class="hidden xl:block fixed w-56 top-32 right-[max(1rem,calc((100vw-640px)/2-16rem))]">
+<aside id="toc" class="hidden xl:block fixed w-56 top-32 right-[max(1rem,calc((100vw-640px)/2-16rem))]">
+  {toc.length > 0 && (
     <nav>
       <p class="font-semibold text-xs uppercase tracking-wide text-black dark:text-white mb-3">
         {t("toc.onThisPage")}
@@ -39,8 +40,11 @@ const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
         ))}
       </ul>
     </nav>
-  </aside>
-)}
+  )}
+  <div class:list={[toc.length > 0 ? "mt-4" : ""]}>
+    <BackToTop />
+  </div>
+</aside>
 
 <script>
   function initToc() {
