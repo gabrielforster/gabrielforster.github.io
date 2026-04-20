@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import PageLayout from "@layouts/PageLayout.astro";
 import Container from "@components/Container.astro";
 import { dateRange } from "@lib/utils";
@@ -10,7 +10,7 @@ const collection = (await getCollection("pt-work"))
 
 const work = await Promise.all(
   collection.map(async (item) => {
-    const { Content } = await item.render();
+    const { Content } = await render(item);
     return { ...item, Content };
   })
 );
@@ -40,7 +40,6 @@ const work = await Promise.all(
                   <ul class="flex flex-wrap space-x-2 pt-2">
                     {
                       entry.data.tags?.length && (
-                        /* @ts-expect-error */
                         entry.data.tags.map(tag => (
                           <li class="bg-zinc-100 px-1 py-0.5 rounded text-black mt-1 text-sm">
                             {tag}

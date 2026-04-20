@@ -47,7 +47,6 @@ const t = useTranslations(lang);
                 {
                   posts[year].map((post) => (
                     <li>
-                      {/* @ts-expect-error */}
                       <ArrowCard entry={post}/>
                     </li>
                   ))
