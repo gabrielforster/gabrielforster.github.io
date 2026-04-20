@@ -21,6 +21,6 @@ export const ui = {
     "header.projects": "projetos",
     "component.backToTop": "Voltar ao topo",
     "content.nothingHere": "Nada para mostrar aqui!",
-    "toc.onThisPage": "Nesta pagina",
+    "toc.onThisPage": "Nesta página",
   },
 } as const;
