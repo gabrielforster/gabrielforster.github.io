@@ -12,7 +12,7 @@ import type { MarkdownHeading } from "astro";
 const headings: MarkdownHeading[] = [
   { depth: 2, slug: "sobre", text: "Sobre" },
   { depth: 2, slug: "experiencias", text: "Experiências" },
-  { depth: 2, slug: "projetos-recentes", text: "Projetos recentes" },
+  // { depth: 2, slug: "projetos-recentes", text: "Projetos recentes" },
   { depth: 2, slug: "posts-recentes", text: "Posts recentes" },
   { depth: 2, slug: "vamos-conversar", text: "Vamos conversar?" },
 ];
@@ -25,10 +25,10 @@ const blog = (await getCollection("pt-blog"))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
 
-const projects = (await getCollection("pt-projects"))
-  .filter(project => !project.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE);
+// const projects = (await getCollection("pt-projects"))
+//   .filter(project => !project.data.draft)
+//   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+//   .slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE);
 
 const work = (await getCollection("pt-work"))
   .sort((a, b) => new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf())
@@ -94,7 +94,7 @@ const work = (await getCollection("pt-work"))
         </ul>
       </section>
 
-      <section class="animate space-y-6">
+      <!-- <section class="animate space-y-6">
         <div class="flex flex-wrap gap-y-2 items-center justify-between">
           <h2 id="projetos-recentes" class="font-semibold text-black dark:text-white">
             Projetos recentes
@@ -117,7 +117,7 @@ const work = (await getCollection("pt-work"))
             </li>
           ))}
         </ul>
-      </section>
+      </section> -->
 
       <section class="animate space-y-6">
         <div class="flex flex-wrap gap-y-2 items-center justify-between">
