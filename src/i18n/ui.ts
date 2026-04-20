@@ -13,6 +13,7 @@ export const ui = {
     "header.projects": "projects",
     "component.backToTop": "Back to top",
     "content.nothingHere": "Nothing to show here!",
+    "toc.onThisPage": "On this page",
   },
   pt: {
     "header.home": "início",
@@ -20,5 +21,6 @@ export const ui = {
     "header.projects": "projetos",
     "component.backToTop": "Voltar ao topo",
     "content.nothingHere": "Nada para mostrar aqui!",
+    "toc.onThisPage": "Nesta pagina",
   },
 } as const;
