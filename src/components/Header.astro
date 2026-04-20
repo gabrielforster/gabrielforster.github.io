@@ -26,6 +26,12 @@ const translatePath = useTranslatedPath(lang);
         </div>
       </Link>
       <nav class="flex gap-1">
+        <Link href={translatePath("/")}>
+          {t("header.home")}
+        </Link>
+        <span>
+          {`/`}
+        </span>
         <Link href={translatePath("/blog")}>
           blog
         </Link>

@@ -8,12 +8,14 @@ export const showDefaultLang = false;
 
 export const ui = {
   en: {
+    "header.home": "home",
     "header.work": "work",
     "header.projects": "projects",
     "component.backToTop": "Back to top",
     "content.nothingHere": "Nothing to show here!",
   },
   pt: {
+    "header.home": "início",
     "header.work": "carreira",
     "header.projects": "projetos",
     "component.backToTop": "Voltar ao topo",

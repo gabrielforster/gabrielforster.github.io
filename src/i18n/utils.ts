@@ -17,3 +17,21 @@ export function useTranslatedPath(lang: keyof typeof ui) {
     return !showDefaultLang && l === defaultLang ? path : `/${l}${path}`;
   };
 }
+
+export function useSwitchLanguagePath(currentUrl: URL) {
+  const currentLang = getLangFromUrl(currentUrl);
+  const pathname = currentUrl.pathname;
+
+  return function switchLanguagePath(targetLang: string): string {
+    // Strip the current lang prefix if present
+    const stripped = currentLang !== defaultLang
+      ? pathname.replace(new RegExp(`^/${currentLang}(/|$)`), "/")
+      : pathname;
+
+    // Add target lang prefix if needed
+    if (!showDefaultLang && targetLang === defaultLang) {
+      return stripped || "/";
+    }
+    return `/${targetLang}${stripped === "/" ? "" : stripped}` || `/${targetLang}`;
+  };
+}
