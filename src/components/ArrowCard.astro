@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { blogPostSlug } from "@lib/utils";
 
 type Props = {
   entry:
@@ -10,9 +11,17 @@ type Props = {
 }
 
 const { entry } = Astro.props;
+
+const isPt = entry.collection.startsWith("pt-");
+const kind = isPt ? entry.collection.slice(3) : entry.collection;
+const prefix = isPt ? `/pt/${kind}` : `/${kind}`;
+const tail = kind === "blog"
+  ? blogPostSlug((entry.data as { date: Date }).date, entry.id)
+  : entry.id;
+const href = `${prefix}/${tail}`;
 ---
 
-<a href={`/${entry.collection.startsWith("pt") ? ("pt/" + entry.collection.split("-")[1]) : entry.collection}/${entry.id}`} class="relative group flex flex-nowrap py-3 px-4 pr-10 rounded-lg border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-colors duration-300 ease-in-out">
+<a href={href} class="relative group flex flex-nowrap py-3 px-4 pr-10 rounded-lg border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-colors duration-300 ease-in-out">
   <div class="flex flex-col flex-1 truncate">
     <div class="font-semibold">
       {entry.data.title}
