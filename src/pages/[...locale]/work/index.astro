@@ -3,7 +3,6 @@ import { getCollection, render } from "astro:content";
 import PageLayout from "@layouts/PageLayout.astro";
 import Container from "@components/Container.astro";
 import { dateRange } from "@lib/utils";
-import { WORK } from "@consts";
 import { getLangFromUrl, useTranslations, getLocaleStaticPaths } from "@i18n/utils";
 import type { MarkdownHeading } from "astro";
 
@@ -32,7 +31,7 @@ const headings: MarkdownHeading[] = work.map(entry => ({
 }));
 ---
 
-<PageLayout title={WORK.TITLE} description={WORK.DESCRIPTION} headings={headings}>
+<PageLayout title={t("meta.work.title")} description={t("meta.work.description")} headings={headings}>
   <Container>
     <div class="space-y-10">
       <div class="animate font-semibold text-black dark:text-white">

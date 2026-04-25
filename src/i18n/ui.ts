@@ -30,6 +30,17 @@ export const ui = {
     "projects.title": "Projects",
     "blog.backToBlog": "Back to blog",
     "projects.backToProjects": "Back to projects",
+    "meta.home.title": "Home",
+    "meta.home.description":
+      "Gabriel's personal portfolio website with some blogs posts and work experience.",
+    "meta.blog.title": "Blog",
+    "meta.blog.description":
+      "A collection of articles on topics I am passionate about.",
+    "meta.work.title": "Work",
+    "meta.work.description": "Where I have worked and what I have done.",
+    "meta.projects.title": "Projects",
+    "meta.projects.description":
+      "A collection of my projects, with links to repositories and demos.",
   },
   pt: {
     "header.home": "início",
@@ -52,5 +63,16 @@ export const ui = {
     "projects.title": "Projetos",
     "blog.backToBlog": "Voltar para blog",
     "projects.backToProjects": "Voltar para projetos",
+    "meta.home.title": "Início",
+    "meta.home.description":
+      "Site pessoal e portfólio de Gabriel com posts de blog e experiência profissional.",
+    "meta.blog.title": "Blog",
+    "meta.blog.description":
+      "Uma coleção de artigos sobre temas que me interessam.",
+    "meta.work.title": "Carreira",
+    "meta.work.description": "Onde trabalhei e o que fiz.",
+    "meta.projects.title": "Projetos",
+    "meta.projects.description":
+      "Uma coleção dos meus projetos, com links para repositórios e demos.",
   },
 } as const;

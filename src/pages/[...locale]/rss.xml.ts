@@ -1,8 +1,7 @@
 import rss from "@astrojs/rss";
 import { getCollection } from "astro:content";
-import { HOME } from "@consts";
 import { blogPostSlug } from "@lib/utils";
-import { getLocaleStaticPaths } from "@i18n/utils";
+import { getLocaleStaticPaths, useTranslations } from "@i18n/utils";
 
 export const getStaticPaths = getLocaleStaticPaths;
 
@@ -12,7 +11,8 @@ type Context = {
 };
 
 export async function GET(context: Context) {
-  const lang = context.params.locale || "en";
+  const lang = (context.params.locale || "en") as "en" | "pt";
+  const t = useTranslations(lang);
   const prefix = context.params.locale ? `/${context.params.locale}` : "";
 
   const blog = lang === "pt"
@@ -38,8 +38,8 @@ export async function GET(context: Context) {
   }));
 
   return rss({
-    title: HOME.TITLE,
-    description: HOME.DESCRIPTION,
+    title: t("meta.home.title"),
+    description: t("meta.home.description"),
     site: context.site,
     items: [...blogItems, ...projectItems]
       .sort((a, b) => new Date(b.pubDate).valueOf() - new Date(a.pubDate).valueOf()),
