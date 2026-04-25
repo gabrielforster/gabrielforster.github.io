@@ -19,7 +19,7 @@ const data = lang === "pt"
       .filter(post => !post.data.draft)
       .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-const posts: Record<string, typeof data> = {};
+const posts: Record<string, (typeof data)[number][]> = {};
 for (const post of data) {
   const year = new Date(post.data.date).getFullYear().toString();
   if (!posts[year]) posts[year] = [];
