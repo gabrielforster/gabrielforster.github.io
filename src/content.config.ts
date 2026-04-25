@@ -34,12 +34,18 @@ const blog = defineCollection({
 });
 
 const work = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/work" }),
+  loader: glob({
+    pattern: ["**/*.{md,mdx}", "!**/*.pt.{md,mdx}"],
+    base: "./src/content/work",
+  }),
   schema: workSchema,
 });
 
 const projects = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/projects" }),
+  loader: glob({
+    pattern: "**/index.{md,mdx}",
+    base: "./src/content/projects",
+  }),
   schema: projectSchema,
 });
 
@@ -58,12 +64,20 @@ const ptBlog = defineCollection({
 });
 
 const ptWork = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/pt-work" }),
+  loader: glob({
+    pattern: "**/*.pt.{md,mdx}",
+    base: "./src/content/work",
+    generateId: ({ entry }) => entry.replace(/\.pt\.(md|mdx)$/, ""),
+  }),
   schema: workSchema,
 });
 
 const ptProjects = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/pt-projects" }),
+  loader: glob({
+    pattern: "**/index.pt.{md,mdx}",
+    base: "./src/content/projects",
+    generateId: ({ entry }) => entry.replace(/\.pt\.(md|mdx)$/, ""),
+  }),
   schema: projectSchema,
 });
 
