@@ -9,6 +9,8 @@ export const SITE: Site = {
   NUM_PROJECTS_ON_HOMEPAGE: 3,
 };
 
+export const YEARS_OF_EXPERIENCE = new Date().getFullYear() - 2022;
+
 export const HOME: Metadata = {
   TITLE: "Home",
   DESCRIPTION: "Gabriel's personal portfolio website with some blogs posts and work experience.",

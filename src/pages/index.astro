@@ -5,7 +5,7 @@ import PageLayout from "@layouts/PageLayout.astro";
 import ArrowCard from "@components/ArrowCard.astro";
 import Link from "@components/Link.astro";
 import { dateRange } from "@lib/utils";
-import { SITE, HOME, SOCIALS } from "@consts";
+import { SITE, HOME, SOCIALS, YEARS_OF_EXPERIENCE } from "@consts";
 import type { MarkdownHeading } from "astro";
 
 const headings: MarkdownHeading[] = [
@@ -52,7 +52,7 @@ const work = (await getCollection("work"))
           </p>
 
           <p class="animate">
-            Located in South Brazil, I have been working with software development for over 3 years.
+            Located in South Brazil, I have been working with software development for over {YEARS_OF_EXPERIENCE} years.
           </p>
 
           <p class="animate">
