@@ -4,10 +4,19 @@ import PageLayout from "@layouts/PageLayout.astro";
 import Container from "@components/Container.astro";
 import { dateRange } from "@lib/utils";
 import { WORK } from "@consts";
+import { getLangFromUrl, useTranslations, getLocaleStaticPaths } from "@i18n/utils";
 import type { MarkdownHeading } from "astro";
 
-const collection = (await getCollection("pt-work"))
-  .sort((a, b) => new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf());
+export const getStaticPaths = getLocaleStaticPaths;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const collection = lang === "pt"
+  ? (await getCollection("pt-work"))
+      .sort((a, b) => new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf())
+  : (await getCollection("work"))
+      .sort((a, b) => new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf());
 
 const work = await Promise.all(
   collection.map(async (item) => {
@@ -27,7 +36,7 @@ const headings: MarkdownHeading[] = work.map(entry => ({
   <Container>
     <div class="space-y-10">
       <div class="animate font-semibold text-black dark:text-white">
-        Carreira
+        {t("work.title")}
       </div>
       <ul class="flex flex-col space-y-4">
         {

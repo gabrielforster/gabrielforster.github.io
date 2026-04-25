@@ -1,4 +1,4 @@
-import { ui, defaultLang, showDefaultLang } from "./ui";
+import { ui, defaultLang, showDefaultLang, languages } from "./ui";
 
 export function getLangFromUrl(url: URL) {
   const [, lang] = url.pathname.split("/");
@@ -17,6 +17,12 @@ export function useTranslatedPath(lang: keyof typeof ui) {
     const normalized = path.replace(/^\//, "");
     return !showDefaultLang && l === defaultLang ? `/${normalized}` : `/${l}/${normalized}`;
   };
+}
+
+export function getLocaleStaticPaths() {
+  return Object.keys(languages).map((lang) => ({
+    params: { locale: lang === defaultLang ? undefined : lang },
+  }));
 }
 
 export function useSwitchLanguagePath(currentUrl: URL) {

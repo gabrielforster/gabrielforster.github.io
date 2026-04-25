@@ -1,32 +1,45 @@
 ---
-import { type CollectionEntry, getCollection, render } from "astro:content";
+import { getCollection, render } from "astro:content";
 import PageLayout from "@layouts/PageLayout.astro";
 import Container from "@components/Container.astro";
 import FormattedDate from "@components/FormattedDate.astro";
 import { readingTime } from "@lib/utils";
 import BackToPrev from "@components/BackToPrev.astro";
 import Link from "@components/Link.astro";
+import { getLangFromUrl, useTranslations, useTranslatedPath } from "@i18n/utils";
 
 export async function getStaticPaths() {
-  const projects = (await getCollection("pt-projects"))
-    .filter(post => !post.data.draft)
+  const enProjects = (await getCollection("projects"))
+    .filter(p => !p.data.draft)
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-  return projects.map((project) => ({
-    params: { slug: project.id },
-    props: project,
-  }));
-}
-type Props = CollectionEntry<"projects">;
+  const ptProjects = (await getCollection("pt-projects"))
+    .filter(p => !p.data.draft)
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-const project = Astro.props;
+  return [
+    ...enProjects.map((project) => ({
+      params: { locale: undefined as undefined, slug: project.id },
+      props: { project },
+    })),
+    ...ptProjects.map((project) => ({
+      params: { locale: "pt", slug: project.id },
+      props: { project },
+    })),
+  ];
+}
+
+const { project } = Astro.props;
 const { Content, headings } = await render(project);
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
 ---
 
 <PageLayout title={project.data.title} description={project.data.description} headings={headings}>
   <Container>
     <div class="animate">
-      <BackToPrev href="/projects">
-        Voltar para projetos
+      <BackToPrev href={translatePath("projects")}>
+        {t("projects.backToProjects")}
       </BackToPrev>
     </div>
     <div class="space-y-1 my-10">

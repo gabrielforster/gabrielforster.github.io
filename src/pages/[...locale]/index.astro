@@ -5,38 +5,73 @@ import PageLayout from "@layouts/PageLayout.astro";
 import ArrowCard from "@components/ArrowCard.astro";
 import Link from "@components/Link.astro";
 import { dateRange } from "@lib/utils";
-import { SITE, HOME, SOCIALS, YEARS_OF_EXPERIENCE } from "@consts";
+import { SITE, HOME, SOCIALS } from "@consts";
+import { getLangFromUrl, useTranslations, useTranslatedPath, getLocaleStaticPaths } from "@i18n/utils";
 import type { MarkdownHeading } from "astro";
 
-const headings: MarkdownHeading[] = [
-  { depth: 2, slug: "about", text: "About" },
-  { depth: 2, slug: "work-experience", text: "Work Experience" },
-  // { depth: 2, slug: "recent-projects", text: "Recent projects" },
-  { depth: 2, slug: "latest-posts", text: "Latest posts" },
-  { depth: 2, slug: "lets-connect", text: "Let's connect" },
-];
+export const getStaticPaths = getLocaleStaticPaths;
 
-const blog = (await getCollection("blog"))
-  .filter(post => !post.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
 
-// const projects = (await getCollection("projects"))
-//   .filter(project => !project.data.draft)
-//   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-//   .slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE);
+const headingsConfig = {
+  en: [
+    { slug: "about", text: "About" },
+    { slug: "work-experience", text: "Work Experience" },
+    { slug: "latest-posts", text: "Latest posts" },
+    { slug: "lets-connect", text: "Let's connect" },
+  ],
+  pt: [
+    { slug: "sobre", text: "Sobre" },
+    { slug: "experiencias", text: "Experiencias" },
+    { slug: "posts-recentes", text: "Posts recentes" },
+    { slug: "vamos-conversar", text: "Vamos conversar?" },
+  ],
+} as const;
 
-const work = (await getCollection("work"))
-  .sort((a, b) => new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf())
-  .slice(0, SITE.NUM_WORKS_ON_HOMEPAGE);
+const h = headingsConfig[lang];
 
+const headings: MarkdownHeading[] = h.map(item => ({
+  depth: 2,
+  slug: item.slug,
+  text: item.text,
+}));
+
+const blog = lang === "pt"
+  ? (await getCollection("pt-blog"))
+      .filter(post => !post.data.draft)
+      .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+      .slice(0, SITE.NUM_POSTS_ON_HOMEPAGE)
+  : (await getCollection("blog"))
+      .filter(post => !post.data.draft)
+      .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+      .slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
+
+// const projects = lang === "pt"
+//   ? (await getCollection("pt-projects"))
+//       .filter(project => !project.data.draft)
+//       .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+//       .slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE)
+//   : (await getCollection("projects"))
+//       .filter(project => !project.data.draft)
+//       .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+//       .slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE);
+
+const work = lang === "pt"
+  ? (await getCollection("pt-work"))
+      .sort((a, b) => new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf())
+      .slice(0, SITE.NUM_WORKS_ON_HOMEPAGE)
+  : (await getCollection("work"))
+      .sort((a, b) => new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf())
+      .slice(0, SITE.NUM_WORKS_ON_HOMEPAGE);
 ---
 
 <PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION} headings={headings}>
   <Container>
     <h4 class="animate font-semibold text-black dark:text-white flex gap-1 items-center">
       <span>
-        Hi, I'm Gabriel
+        {t("home.greeting")}
       </span>
       <span class="text-xl">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smile-icon lucide-smile"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
@@ -44,31 +79,21 @@ const work = (await getCollection("work"))
     </h4>
     <div class="space-y-16">
       <section>
-        <h2 id="about" class="sr-only">About</h2>
+        <h2 id={h[0].slug} class="sr-only">{h[0].text}</h2>
         <article class="space-y-4">
-          <p class="animate">
-            I am a fullstack software developer with expertise in building robust, simple and maintanable systems.
-            Committed to delivering innovative solutions for complex problems. Currently, undergrad software engineering student.
-          </p>
-
-          <p class="animate">
-            Located in South Brazil, I have been working with software development for over {YEARS_OF_EXPERIENCE} years.
-          </p>
-
-          <p class="animate">
-            Proficient in NodeJS, ReactJS, VueJS, SQL and No-SQL databases, Serverless and Microservices architecture.
-            Familiarity with On-premises architecture, Docker, CI/CD pipelines, Linux and server configuration, Real-time applications e Pub-Sub.
-          </p>
+          <p class="animate">{t("home.about.p1")}</p>
+          <p class="animate">{t("home.about.p2")}</p>
+          <p class="animate">{t("home.about.p3")}</p>
         </article>
       </section>
 
       <section class="animate space-y-6">
         <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h2 id="work-experience" class="font-semibold text-black dark:text-white">
-            Work Experience
+          <h2 id={h[1].slug} class="font-semibold text-black dark:text-white">
+            {h[1].text}
           </h2>
-          <Link href="/work">
-            Show more
+          <Link href={translatePath("work")}>
+            {t("home.showMore")}
           </Link>
         </div>
         <ul class="flex flex-col sm:flex-row gap-4">
@@ -92,9 +117,9 @@ const work = (await getCollection("work"))
 
       <!-- <section class="animate space-y-6">
         <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h2 id="recent-projects" class="font-semibold text-black dark:text-white">
+          <h5 class="font-semibold text-black dark:text-white">
             Recent projects
-          </h2>
+          </h5>
           <Link href="/projects">
             Show more
           </Link>
@@ -117,11 +142,11 @@ const work = (await getCollection("work"))
 
       <section class="animate space-y-6">
         <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h2 id="latest-posts" class="font-semibold text-black dark:text-white">
-            Latest posts
+          <h2 id={h[2].slug} class="font-semibold text-black dark:text-white">
+            {h[2].text}
           </h2>
-          <Link href="/blog">
-            See all posts
+          <Link href={translatePath("blog")}>
+            {t("home.seeAllPosts")}
           </Link>
         </div>
         <ul class="flex flex-col gap-4">
@@ -134,13 +159,12 @@ const work = (await getCollection("work"))
       </section>
 
       <section class="animate space-y-4">
-        <h2 id="lets-connect" class="font-semibold text-black dark:text-white">
-          Let's connect
+        <h2 id={h[3].slug} class="font-semibold text-black dark:text-white">
+          {h[3].text}
         </h2>
         <article>
           <p>
-            If you want to get in touch with me,
-            reach out on social media or send me an email.
+            {t("home.connectText")}
           </p>
         </article>
         <ul class="flex flex-wrap gap-2">
@@ -151,7 +175,7 @@ const work = (await getCollection("work"))
             {"/"}
           </li>
           {SOCIALS.map((SOCIAL, index) => (
-          <li class="flex gap-x-2 text-nowrap">
+            <li class="flex gap-x-2 text-nowrap">
               {index !== 0 && "/"}
               <Link href={SOCIAL.HREF} external aria-label={`${SITE.NAME} on ${SOCIAL.NAME}`}>
                 {SOCIAL.NAME}

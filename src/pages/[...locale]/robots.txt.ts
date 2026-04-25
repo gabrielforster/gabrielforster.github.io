@@ -1,4 +1,7 @@
 import type { APIRoute } from "astro";
+import { getLocaleStaticPaths } from "@i18n/utils";
+
+export const getStaticPaths = getLocaleStaticPaths;
 
 const robotsTxt = `
 User-agent: *

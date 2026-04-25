@@ -5,39 +5,53 @@ import Container from "@components/Container.astro";
 import FormattedDate from "@components/FormattedDate.astro";
 import { blogPostSlug, readingTime } from "@lib/utils";
 import BackToPrev from "@components/BackToPrev.astro";
-import { getLangFromUrl, useTranslatedPath  } from "../../../i18n/utils";
+import { getLangFromUrl, useTranslations, useTranslatedPath } from "@i18n/utils";
 
 export async function getStaticPaths() {
-  const posts = (await getCollection("pt-blog"))
+  const enPosts = (await getCollection("blog"))
     .filter(post => !post.data.draft)
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-  const enPosts = (await getCollection("blog"))
-    .filter(post => !post.data.draft);
+  const ptPosts = (await getCollection("pt-blog"))
+    .filter(post => !post.data.draft)
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-  return posts.map((post) => {
+  const enPaths = enPosts.map((post) => {
+    const ptPost = ptPosts.find(p => p.id === post.id);
+    const translatedUrl = ptPost
+      ? `/pt/blog/${blogPostSlug(ptPost.data.date, ptPost.data.slug)}`
+      : undefined;
+    return {
+      params: { locale: undefined as undefined, slug: blogPostSlug(post.data.date, post.data.slug) },
+      props: { post, translatedUrl },
+    };
+  });
+
+  const ptPaths = ptPosts.map((post) => {
     const enPost = enPosts.find(p => p.id === post.id);
     const translatedUrl = enPost
       ? `/blog/${blogPostSlug(enPost.data.date, enPost.data.slug)}`
       : undefined;
     return {
-      params: { slug: blogPostSlug(post.data.date, post.data.slug) },
+      params: { locale: "pt", slug: blogPostSlug(post.data.date, post.data.slug) },
       props: { post, translatedUrl },
     };
   });
+
+  return [...enPaths, ...ptPaths];
 }
 
 const { post, translatedUrl } = Astro.props;
 const { Content, headings } = await render(post);
-
 const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
 ---
 
 <PageLayout title={post.data.title} description={post.data.description} headings={headings} translatedUrl={translatedUrl}>
   <Container>
     <div class="animate">
-      <BackToPrev href={translatePath("/blog")}>
-        Voltar para blog
+      <BackToPrev href={translatePath("blog")}>
+        {t("blog.backToBlog")}
       </BackToPrev>
     </div>
     <div class="space-y-1 my-10">

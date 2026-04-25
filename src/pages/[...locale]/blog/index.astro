@@ -1,28 +1,31 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content";
+import { getCollection } from "astro:content";
 import PageLayout from "@layouts/PageLayout.astro";
 import Container from "@components/Container.astro";
 import ArrowCard from "@components/ArrowCard.astro";
 import { BLOG } from "@consts";
-import { getLangFromUrl, useTranslations } from "../../../i18n/utils";
+import { getLangFromUrl, useTranslations, getLocaleStaticPaths } from "@i18n/utils";
 import type { MarkdownHeading } from "astro";
 
-const data = (await getCollection("pt-blog"))
-  .filter(post => !post.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+export const getStaticPaths = getLocaleStaticPaths;
 
-type Acc = {
-  [year: string]: CollectionEntry<"pt-blog">[];
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const data = lang === "pt"
+  ? (await getCollection("pt-blog"))
+      .filter(post => !post.data.draft)
+      .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  : (await getCollection("blog"))
+      .filter(post => !post.data.draft)
+      .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const posts: Record<string, typeof data> = {};
+for (const post of data) {
+  const year = new Date(post.data.date).getFullYear().toString();
+  if (!posts[year]) posts[year] = [];
+  posts[year].push(post);
 }
-
-const posts = data.reduce((acc: Acc, post) => {
-    const year = new Date(post.data.date).getFullYear().toString();
-    if (!acc[year]) {
-      acc[year] = [];
-    }
-    acc[year].push(post);
-    return acc;
-  }, {});
 
 const years = Object.keys(posts).sort((a, b) => parseInt(b) - parseInt(a));
 
@@ -31,9 +34,6 @@ const headings: MarkdownHeading[] = years.map(year => ({
   slug: year,
   text: year,
 }));
-
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
 ---
 
 <PageLayout title={BLOG.TITLE} description={BLOG.DESCRIPTION} headings={headings}>

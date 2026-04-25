@@ -2,30 +2,39 @@ import rss from "@astrojs/rss";
 import { getCollection } from "astro:content";
 import { HOME } from "@consts";
 import { blogPostSlug } from "@lib/utils";
+import { getLocaleStaticPaths } from "@i18n/utils";
+
+export const getStaticPaths = getLocaleStaticPaths;
 
 type Context = {
-  site: string
-}
+  site: string;
+  params: { locale?: string };
+};
 
 export async function GET(context: Context) {
-  const blog = (await getCollection("pt-blog"))
-  .filter(post => !post.data.draft);
+  const lang = context.params.locale || "en";
+  const prefix = context.params.locale ? `/${context.params.locale}` : "";
 
-  const projects = (await getCollection("pt-projects"))
-    .filter(project => !project.data.draft);
+  const blog = lang === "pt"
+    ? (await getCollection("pt-blog")).filter(post => !post.data.draft)
+    : (await getCollection("blog")).filter(post => !post.data.draft);
+
+  const projects = lang === "pt"
+    ? (await getCollection("pt-projects")).filter(project => !project.data.draft)
+    : (await getCollection("projects")).filter(project => !project.data.draft);
 
   const blogItems = blog.map((post) => ({
     title: post.data.title,
     description: post.data.description,
     pubDate: post.data.date,
-    link: `/pt/blog/${blogPostSlug(post.data.date, post.data.slug)}/`,
+    link: `${prefix}/blog/${blogPostSlug(post.data.date, post.data.slug)}/`,
   }));
 
   const projectItems = projects.map((project) => ({
     title: project.data.title,
     description: project.data.description,
     pubDate: project.data.date,
-    link: `/pt/projects/${project.id}/`,
+    link: `${prefix}/projects/${project.id}/`,
   }));
 
   return rss({
