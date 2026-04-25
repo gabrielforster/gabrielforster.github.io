@@ -1,6 +1,7 @@
 ---
 title: "Primeiros passos"
 description: "Comece a usar rapidamente."
+slug: "primeiros-passos"
 date: "Mar 22 2024"
 draft: false
 ---

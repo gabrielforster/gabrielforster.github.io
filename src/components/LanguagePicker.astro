@@ -3,13 +3,25 @@ import { languages } from "../i18n/ui";
 import { getLangFromUrl, useSwitchLanguagePath } from "../i18n/utils";
 import { cn } from "@lib/utils";
 
+type Props = {
+  translatedUrl?: string;
+};
+
+const { translatedUrl } = Astro.props;
 const selectedLang = getLangFromUrl(Astro.url);
 const switchPath = useSwitchLanguagePath(Astro.url);
+
+function getHref(lang: string): string {
+  if (translatedUrl && lang !== selectedLang) {
+    return translatedUrl;
+  }
+  return switchPath(lang);
+}
 ---
 <ul class="flex space-x-2">
   {Object.entries(languages).map(([lang, label]) => (
     <li>
-      <a href={switchPath(lang)}>
+      <a href={getHref(lang)}>
         <img
           class={cn(
             "h-5 w-8 transition-opacity duration-200 ease-in-out object-cover rounded hover:opacity-75",

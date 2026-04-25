@@ -11,9 +11,10 @@ type Props = {
   title: string;
   description: string;
   headings?: MarkdownHeading[];
+  translatedUrl?: string;
 };
 
-const { title, description, headings } = Astro.props;
+const { title, description, headings, translatedUrl } = Astro.props;
 
 const lang = getLangFromUrl(Astro.url);
 ---
@@ -24,7 +25,7 @@ const lang = getLangFromUrl(Astro.url);
     <Head title={`${title} | ${SITE.NAME}`} description={description} />
   </head>
   <body>
-    <Header />
+    <Header translatedUrl={translatedUrl} />
     <main>
       <slot />
     </main>

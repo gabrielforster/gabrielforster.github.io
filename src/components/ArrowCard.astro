@@ -16,7 +16,7 @@ const isPt = entry.collection.startsWith("pt-");
 const kind = isPt ? entry.collection.slice(3) : entry.collection;
 const prefix = isPt ? `/pt/${kind}` : `/${kind}`;
 const tail = kind === "blog"
-  ? blogPostSlug((entry.data as { date: Date }).date, entry.id)
+  ? blogPostSlug((entry.data as { date: Date; slug: string }).date, (entry.data as { slug: string }).slug)
   : entry.id;
 const href = `${prefix}/${tail}`;
 ---

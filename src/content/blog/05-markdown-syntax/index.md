@@ -1,6 +1,7 @@
 ---
 title: "Markdown syntax guide"
 description: "Get started writing content in markdown."
+slug: "markdown-syntax"
 date: "Mar 17 2024"
 draft: true
 ---

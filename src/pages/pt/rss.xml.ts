@@ -14,24 +14,25 @@ export async function GET(context: Context) {
   const projects = (await getCollection("pt-projects"))
     .filter(project => !project.data.draft);
 
-  const items = [...blog, ...projects]
-    .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+  const blogItems = blog.map((post) => ({
+    title: post.data.title,
+    description: post.data.description,
+    pubDate: post.data.date,
+    link: `/pt/blog/${blogPostSlug(post.data.date, post.data.slug)}/`,
+  }));
+
+  const projectItems = projects.map((project) => ({
+    title: project.data.title,
+    description: project.data.description,
+    pubDate: project.data.date,
+    link: `/pt/projects/${project.id}/`,
+  }));
 
   return rss({
     title: HOME.TITLE,
     description: HOME.DESCRIPTION,
     site: context.site,
-    items: items.map((item) => {
-      const kind = item.collection.slice(3); // strip "pt-" prefix
-      const tail = kind === "blog"
-        ? blogPostSlug(item.data.date, item.id)
-        : item.id;
-      return {
-        title: item.data.title,
-        description: item.data.description,
-        pubDate: item.data.date,
-        link: `/pt/${kind}/${tail}/`,
-      };
-    }),
+    items: [...blogItems, ...projectItems]
+      .sort((a, b) => new Date(b.pubDate).valueOf() - new Date(a.pubDate).valueOf()),
   });
 }

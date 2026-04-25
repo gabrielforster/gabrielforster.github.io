@@ -1,6 +1,7 @@
 ---
 title: "Repository Pattern GO"
 description: "Using repository pattern in GO the right way"
+slug: "repository-pattern-go"
 date: "Mar 22 2024"
 draft: true
 ---

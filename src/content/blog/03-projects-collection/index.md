@@ -1,6 +1,7 @@
 ---
 title: "Projects Collection"
 description: "How to add projects to your portfolio."
+slug: "projects-collection"
 date: "Mar 20 2024"
 draft: true
 ---

@@ -1,5 +1,5 @@
 ---
-import { type CollectionEntry, getCollection, render } from "astro:content";
+import { getCollection, render } from "astro:content";
 import PageLayout from "@layouts/PageLayout.astro";
 import Container from "@components/Container.astro";
 import FormattedDate from "@components/FormattedDate.astro";
@@ -10,18 +10,26 @@ export async function getStaticPaths() {
   const posts = (await getCollection("blog"))
     .filter(post => !post.data.draft)
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-  return posts.map((post) => ({
-    params: { slug: blogPostSlug(post.data.date, post.id) },
-    props: post,
-  }));
-}
-type Props = CollectionEntry<"blog">;
+  const ptPosts = (await getCollection("pt-blog"))
+    .filter(post => !post.data.draft);
 
-const post = Astro.props;
+  return posts.map((post) => {
+    const ptPost = ptPosts.find(p => p.id === post.id);
+    const translatedUrl = ptPost
+      ? `/pt/blog/${blogPostSlug(ptPost.data.date, ptPost.data.slug)}`
+      : undefined;
+    return {
+      params: { slug: blogPostSlug(post.data.date, post.data.slug) },
+      props: { post, translatedUrl },
+    };
+  });
+}
+
+const { post, translatedUrl } = Astro.props;
 const { Content, headings } = await render(post);
 ---
 
-<PageLayout title={post.data.title} description={post.data.description} headings={headings}>
+<PageLayout title={post.data.title} description={post.data.description} headings={headings} translatedUrl={translatedUrl}>
   <Container>
     <div class="animate">
       <BackToPrev href="/blog">

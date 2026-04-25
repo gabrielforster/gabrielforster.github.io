@@ -1,6 +1,7 @@
 ---
 title: "Work Collection"
 description: "How to add work experience."
+slug: "work-collection"
 date: "Mar 19 2024"
 draft: true
 ---

@@ -1,6 +1,7 @@
 ---
 title: "Getting started"
 description: "Hit the ground running."
+slug: "getting-started"
 date: "Mar 22 2024"
 draft: false
 ---

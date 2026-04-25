@@ -5,8 +5,10 @@ import { glob } from "astro/loaders";
 const postSchema = z.object({
   title: z.string(),
   description: z.string(),
+  slug: z.string(),
   date: z.coerce.date(),
   draft: z.boolean().optional(),
+  tags: z.array(z.string()).optional(),
 });
 
 const workSchema = z.object({
@@ -27,7 +29,7 @@ const projectSchema = z.object({
 });
 
 const blog = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/blog" }),
+  loader: glob({ pattern: "**/index.{md,mdx}", base: "./src/content/blog" }),
   schema: postSchema,
 });
 
@@ -42,7 +44,16 @@ const projects = defineCollection({
 });
 
 const ptBlog = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/pt-blog" }),
+  loader: glob({
+    pattern: "**/index.pt.{md,mdx}",
+    base: "./src/content/blog",
+    generateId: ({ entry }) =>
+      entry
+        .replace(/\/index\.pt\.(md|mdx)$/, "")
+        .split("/")
+        .map((s) => s.replace(/^\d+-/, ""))
+        .join("/"),
+  }),
   schema: postSchema,
 });
 

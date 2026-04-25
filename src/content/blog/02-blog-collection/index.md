@@ -1,6 +1,7 @@
 ---
 title: "Blog Collection"
 description: "How to add posts to your blog."
+slug: "blog-collection"
 date: "Mar 21 2024"
 draft: true
 ---
